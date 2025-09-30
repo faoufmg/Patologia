@@ -1,0 +1,124 @@
+/* Estilo geral do corpo */
+body {
+    background-color: #f4f4f4; /* Fundo claro */
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Garante que o body preenche toda a altura da tela */
+}
+
+/* Container principal */
+.container {
+    flex: 1; /* Faz o container expandir para ocupar o espaço entre o header (se houver) e o footer */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box; /* Inclui o padding na largura */
+}
+
+/* Estilo do formulário de login */
+.login-container {
+    background-color: #ffffff; /* Fundo branco */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
+    padding: 25px; /* Padding interno */
+    width: 100%;
+    max-width: 400px; /* Limita o tamanho máximo em desktops */
+}
+
+/* Título do formulário */
+.login-container h2 {
+    color: #343a40; /* Cinza escuro */
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px; /* Espaçamento controlado */
+}
+
+/* Labels e campos */
+.login-container label {
+    color: #495057; /* Cinza mais escuro */
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.login-container .form-control {
+    border: 1px solid #ced4da; /* Borda sutil */
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* Botão de login */
+.login-container .btn-primary {
+    background-color: #831D1C; /* Vermelho Bootstrap */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%; /* Preenche a largura */
+    margin-top: 10px; /* Espaço controlado */
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+}
+
+.login-container .btn-primary:hover {
+    background-color: #831D1C; /* Vermelho mais escuro */
+}
+
+/* Link de recuperação de senha */
+.login-container a {
+    color: #831D1C; /* Vermelho */
+    text-decoration: none;
+    font-size: 14px;
+    display: block; /* Garante espaço para toda a linha */
+    text-align: center;
+    margin-top: 10px;
+}
+
+.login-container a:hover {
+    text-decoration: underline;
+}
+
+p.copy {
+    margin-bottom: 0 !important;
+    color: white;
+}
+
+/* Footer fixado na base */
+footer {
+    background-color: #831D1C; /* Vermelho */
+    color: #ffffff; /* Texto branco */
+    text-align: center;
+    padding: 10px 0; /* Ajuste de padding para dispositivos pequenos */
+    font-size: 14px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 5px; /* Padding reduzido para tablets */
+    }
+
+    footer {
+        font-size: 14px; /* Fonte menor no footer */
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 10px; /* Padding menor para dispositivos muito pequenos */
+
+    }
+
+    .login-container {
+        padding: 15px; /* Formulário mais compacto em smartphones */
+    }
+
+    footer {
+        font-size: 12px; /* Ajuste de fonte no footer */
+    }
+}

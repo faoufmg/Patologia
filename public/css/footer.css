@@ -1,0 +1,36 @@
+/* Estiliza o footer */
+footer {
+    background-color: #831D1C !important;
+    color: black;
+    text-align: center;
+    width: 100%;
+    height: 30px;
+    padding: 3px;
+    margin-top: auto;
+    /* Garante que o footer fique sempre no final */
+    position: absolute;
+    bottom: 0;
+}
+
+/* Define os links no footer */
+footer .copy a {
+    color: white !important;
+    text-decoration: none;
+}
+
+footer .copy a:hover {
+    text-decoration: underline;
+}
+
+/* Anima o footer ao passar o mouse */
+footer a:hover {
+    font-weight: bolder;
+    text-decoration: underline;
+    color: white;
+}
+
+/* Dimensões da imagem do footer */
+.footer-img {
+    width: 120px;
+    height: auto;
+}
