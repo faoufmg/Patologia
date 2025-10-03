@@ -53,6 +53,7 @@ $paciente = isset($_POST['paciente']) ? sanitizeInput($_POST['paciente']) : NULL
 $tempo = isset($_POST['tempo_doenca']) ? sanitizeInput($_POST['tempo_doenca']) : NULL;
 $numero = isset($_POST['numero_lesao']) ? sanitizeInput($_POST['numero_lesao']) : NULL;
 $envolvimento_osseo = isset($_POST['envolvimento_osseo']) ? sanitizeInput($_POST['envolvimento_osseo']) : NULL;
+$foto_clinica = isset($_POST['foto_clinica']) ? sanitizeInput($_POST['foto_clinica']) : NULL;
 $observacoes = isset($_POST['observacoes']) ? sanitizeInput($_POST['observacoes']) : NULL;
 
 $coloracao = NULL;
@@ -169,14 +170,20 @@ try {
                     // Validação do tipo de arquivo
                     $formatos_img = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
                     if (!in_array($tipo_imagem, $formatos_img)) {
-                        // Apenas ignora este arquivo e continua para o próximo
+                        echo 
+                            "<script>
+                                alert('Tipo de arquivo inválido: " . $imagem['name'] . "');
+                            </script>";
                         continue;
                     }
 
-                    // Validação do tamanho do arquivo (50MB)
+                    // Validação do tamanho do arquivo (100MB)
                     $tamanho_max = 50 * 1024 * 1024;
                     if ($tamanho_imagem > $tamanho_max) {
-                        // Apenas ignora este arquivo e continua para o próximo
+                        echo 
+                            "<script>
+                                alert('Tamanho do arquivo inválido: " . $imagem['name'] . ". O tamanho máximo permitido é 50MB.');
+                            </script>";
                         continue;
                     }
 
@@ -201,6 +208,67 @@ try {
                         $stmt->execute();
                     } else {
                         error_log("Erro ao mover o arquivo de envolvimento ósseo: " . $nome_imagem . " para " . $caminho_arquivo);
+                    }
+                }
+            }
+        }
+
+        if ($foto_clinica === "Sim" && isset($_FILES['foto_clinica_img'])) {
+
+            $fotosClinicas = reArrayFiles($_FILES['foto_clinica_img']);
+            
+            foreach ($fotosClinicas as $foto) {
+                if ($foto['error'] == UPLOAD_ERR_OK) {
+                    $nome = basename($foto['name']);
+
+                    // Sanitização do nome do arquivo
+                    $nome = preg_replace('/[^a-zA-Z-9_.-]/', '_', $nome);
+                    $nome_foto = uniqid() . "_" . $nome;
+
+                    $tipo_foto = $foto['type'];
+                    $tamanho_foto = $foto['size'];
+
+                    // Validação do tipo de arquivo
+                    $formatos_img = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+                    if (!in_array($tipo_foto, $formatos_img)) {
+                        echo 
+                            "<script>
+                                alert('Tipo de arquivo inválido: " . $imagem['name'] . "');
+                            </script>";
+                        continue;
+                    }
+
+                    // Validação do tamanho do arquivo (100MB)
+                    $tamanho_max = 50 * 1024 * 1024;
+                    if ($tamanho_foto > $tamanho_max) {
+                        echo 
+                            "<script>
+                                alert('Tamanho do arquivo inválido: " . $imagem['name'] . ". O tamanho máximo permitido é 50MB.');
+                            </script>";
+                        continue;
+                    }
+
+                    // Diretório para armazenar
+                    $diretorio_upload = '/var/www/BDHC/uploads/images/';
+
+                    // Move o arquivo para o diretório
+                    $caminho_arquivo = $diretorio_upload . $nome_foto;
+
+                    if (move_uploaded_file($foto['tmp_name'], $caminho_arquivo)) {
+                        $query =
+                            "INSERT INTO
+                                FotoClinica(NomeFoto, TipoFoto, TamanhoFoto, CaminhoFoto, DadosLesao_id)
+                            VALUES
+                                (:NomeFoto, :TipoFoto, :TamanhoFoto, :CaminhoFoto, :DadosLesao_id)";
+                        $stmt = $pdo->prepare($query);
+                        $stmt->bindParam(':NomeFoto', $nome_foto, PDO::PARAM_STR);
+                        $stmt->bindParam(':TipoFoto', $tipo_foto, PDO::PARAM_STR);
+                        $stmt->bindParam(':TamanhoFoto', $tamanho_foto, PDO::PARAM_INT);
+                        $stmt->bindParam(':CaminhoFoto', $caminho_arquivo, PDO::PARAM_STR);
+                        $stmt->bindParam(':DadosLesao_id', $lesao_id, PDO::PARAM_INT);
+                        $stmt->execute();
+                    } else {
+                        error_log("Erro ao mover o arquivo de foto clínica: " . $nome_foto . " para " . $caminho_arquivo);
                     }
                 }
             }

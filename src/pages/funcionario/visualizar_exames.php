@@ -24,7 +24,7 @@ try {
                 LEFT JOIN
                     Retirada AS R ON R.Laboratorio_id = L.Laboratorio_id
                 WHERE 
-                    SE.Ativo = 1 AND ExameNum NOT IN ('1','2','3','4','5','6','7','8','9','10')";
+                    SE.Ativo = 1 AND P.NomePaciente NOT IN (SELECT NomePaciente FROM Paciente WHERE NomePaciente LIKE 'teste%')";
         $stmt = $pdo->prepare($query);
         $stmt->execute();
         $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);

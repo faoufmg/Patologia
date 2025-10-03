@@ -14,7 +14,25 @@ if (!isset($_POST['Paciente_id'])) {
     exit();
 }
 
+function getRedirectUrl($cargo) {
+    $paths = [
+        'professor' => 'professor',
+        'professor_dev' => 'professor',
+        'funcionário' => 'funcionario',
+        'funcionário_dev' => 'funcionario',
+        'dentista' => 'dentista',
+        'alunopos' => 'aluno'
+    ];
+    
+    if (!isset($paths[$cargo])) {
+        return false;
+    }
+    
+    return '../../pages/' . $paths[$cargo] . '/visualizar_exames.php';
+}
+
 $paciente_id = $_POST['Paciente_id'];
+$cargo = $_SESSION['cargo'];
 
 try {
     $query =
@@ -82,6 +100,16 @@ try {
     $dataHora = ((new DateTime('now', new DateTimeZone('America/Sao_Paulo'))))->format('Y/m/d H:i:s');
     $dataHoraLaudo = (new DateTime('now', new DateTimeZone('America/Sao_Paulo')))->format('d/m/Y H:i:s');
     $assinaturaImg = $assinatura_base64 ? '<img src="data:image/png;base64,' . $assinatura_base64 . '" alt="Assinatura" width="150px" />' : '';
+
+    $professoras = ['Patrícia Carlos Caldeira', 'Maria Cássia Ferreira de Aguiar', 'Tarcilia Aparecida da Silva', 'Sílvia Ferreira de Sousa'];
+    $professores = ['Ricardo Santiago Gomez', 'Felipe Paiva Fonseca', 'Ricardo Alves Mesquita', 'Igor Henrique Martins de Almeida', 'professor'];
+
+    $genero = '';
+    if(in_array($nomeProfessor, $professores)) {
+        $genero = 'Prof. Dr.';
+    } elseif(in_array($nomeProfessor, $professoras)) {
+        $genero = 'Profa. Dra.';
+    }
 
     // <p><strong>Procedência:</strong> {$procedenciaExame}</p>
     $procedencia_html = '';
@@ -245,9 +273,9 @@ try {
                         <div class="signature-block">
                             {$assinaturaImg}
                             <p>____________________</p>
-                            <p><strong>Prof. Dr. {$nomeProfessor}</strong></p>
-                            <p><strong>CRO: {$cro}</strong></p>
-                            <p><em>Patologista</em></p>
+                            <p><strong>{$genero} {$nomeProfessor}</strong></p>
+                            <p><strong>CRO-MG: {$cro}</strong></p>
+                            <p><em>Patologista Bucal</em></p>
                         </div>
                     </div>
                 </div>
@@ -293,17 +321,21 @@ HTML;
         $stmt->execute();
     }
 
-    echo 
-        "<script>
-            alert('Laudo armazenado com sucesso.');
-            window.location.href = '../../pages/funcionario/visualizar_exames.php';
-        </script>";
-    exit();
+    $redirectUrl = getRedirectUrl($cargo);
+
+    if($redirectUrl){
+        echo "<script>
+                alert('Laudo atualizado com sucesso.');
+                window.location.href = '$redirectUrl';
+            </script>";
+        exit();
+    } else {
+        echo "<script>alert('Erro: Cargo não reconhecido!');</script>";
+    }
 
 } catch(Exception $e) {
     echo "<script>
             alert('Erro ao processar o laudo: " . addslashes($e->getMessage()) . "');
-            window.location.href = '../../pages/funcionario/visualizar_exames.php';
         </script>";
     exit();
 }

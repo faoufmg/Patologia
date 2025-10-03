@@ -141,7 +141,6 @@ try {
                         <th>Profissão</th>
                         <th>Procedência</th>
                         <th>Remetente</th>
-                        <th>Visualizar Documentos</th>
                     </tr>
                 </thead>
                 <tbody id="paciente-dados">
@@ -170,18 +169,6 @@ try {
                         <td>' . $paciente['Profissao'] . '</td>
                         <td>' . $paciente['ProcedenciaExame'] . '</td>
                         <td>' . $paciente['SolicitantePaciente'] . '</td>
-                        <td>';
-    
-                            if ($paciente['ProcedenciaExame'] == 'Odilon Behrens') {
-                                echo '<form action="../visualizar/visualizar_documento.php" method="post" target="_blank" style="display:inline;">
-                                        <input type="hidden" name="Paciente_id" value="' . $paciente_id . '">
-                                        <button type="submit" class="btn btn-primary">Visualizar</button>
-                                    </form>';
-                            } else {
-                                echo "Não disponível";
-                            }
-    
-                        echo '</td>
 
                     </tr>';
                     }
@@ -281,8 +268,14 @@ try {
                 <tbody id="lesao-dados">
                     <?php
                     foreach ($macroscopia as $macro) {
-                        echo
-                        '<tr>
+                        if($macro['Observacao'] === "Revisão de Lâmina") {
+                            echo
+                            '<tr>
+                                <td colspan="13">' . $macro['Observacao'] . '</td>
+                            </tr>';
+                        } else {
+                            echo
+                            '<tr>
                                 <td>' . $macro['Fragmentos'] . '</td>
                                 <td>' . $macro['TipoFragmento'] . '</td>
                                 <td>' . $macro['Formato'] . '</td>
@@ -292,17 +285,25 @@ try {
                                 <td>' . $macro['FragInclusao'] . '</td>
                                 <td>' . $macro['FragDescalcificacao'] . '</td>
                                 <td>' . $macro['TamanhoMacro'] . '</td>
-                                <td>' . date('d/m/Y', strtotime($macro['Data'])) . '</td>
+                                <td>' . ( 
+                                    $macro['Data'] === '0001-01-01' ?
+                                    'Data não informada' :
+                                    date('d/m/Y', strtotime($macro['Data'])) 
+                                ) . '</td>
                                 <td>' . $macro['Responsaveis'] . '</td>
                                 <td>' . $macro['Observacao'] . '</td>
                                 <td>';
-                                echo '<form action="../editar/editar_macro.php" method="post" style="display:inline;">
-                                        <input type="hidden" name="Macroscopia_id" value="' . $macro['Macroscopia_id'] . '">
-                                        <button type="submit" class="btn btn-primary">Editar</button>
-                                    </form>';
+                                    
+                                        echo '<form action="../editar/editar_macro.php" method="post" style="display:inline;">
+                                                <input type="hidden" name="Macroscopia_id" value="' . $macro['Macroscopia_id'] . '">
+                                                <button type="submit" class="btn btn-primary">Editar</button>
+                                            </form>';
+                                    
                                     
                                 echo '</td>
                             </tr>';
+                        }
+
                     }
                     ?>
                 </tbody>

@@ -27,7 +27,8 @@ try {
                     L.Paciente_id = P.Paciente_id
                 WHERE
                     (M.Macroscopia_id IS NULL) AND (SE.Ativo = 1) AND 
-                    P.NomePaciente NOT IN (SELECT NomePaciente FROM Paciente WHERE NomePaciente LIKE 'teste%')";
+                    P.NomePaciente NOT IN (SELECT NomePaciente FROM Paciente WHERE NomePaciente LIKE 'teste%')
+                    AND (ExameNum NOT REGEXP '[a-zA-Z]')";
         $stmt = $pdo->prepare($query);
         $stmt->execute();
         $resultado = $stmt->fetchAll();
@@ -48,8 +49,12 @@ try {
                     SolicitacaoExame AS SE
                 ON
                     SE.CodigoSolicitacao = P.CodigoSolicitacao
+                JOIN
+                    Laboratorio AS L
+                ON
+                    L.Paciente_id = P.Paciente_id
                 WHERE
-                    (M.Macroscopia_id IS NULL) AND (SE.Ativo = 1)";
+                    (M.Macroscopia_id IS NULL) AND (SE.Ativo = 1) AND (ExameNum NOT REGEXP '[a-zA-Z]')";
         $stmt = $pdo->prepare($query);
         $stmt->execute();
         $resultado = $stmt->fetchAll();
@@ -93,7 +98,7 @@ try {
                 <form action="../../models/macro.php" method="POST" enctype="multipart/form-data">
                     <div class="row">
 
-                        <div class="col-md-10 text-center">
+                        <div class="col-md-5 text-center">
                             <label for="paciente"><strong>Paciente</strong></label>
                             <select
                                 class="selectpicker w-100"
@@ -101,9 +106,11 @@ try {
                                 name="paciente"
                                 id="paciente"
                                 data-live-search="true"
+                                data-live-search-style="startsWith"
+                                data-live-search-normalize="true"
                                 data-size="10"
                                 required>
-                                <option disabled <?php echo empty($paciente_id) ? 'selected' : ''; ?>>Selecione o paciente</option>
+                                <option value="Selecione o paciente" disabled selected>Selecione o paciente</option>
                                 <?php
                                 if (!empty($resultado)) {
                                     foreach ($resultado as $row) {
@@ -115,6 +122,11 @@ try {
                                 }
                                 ?>
                             </select>
+                        </div>
+
+                        <div class="col-md-5 text-center" >
+                            <label for="cod_exame"><strong>Código do Exame</strong></label>
+                            <input type="text" readonly name="cod_exame" class="form-control" id="cod_exame" >
                         </div>
 
                         <div class="col-md-2 text-center">
@@ -295,6 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script src="../../../public/js/camposEscondidosMacro.js"></script>
+<script src="../../../public/js/informacoes.js"></script>
 
 <?php
 include_once('../../partials/footer.php');

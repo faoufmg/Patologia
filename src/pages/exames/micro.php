@@ -87,7 +87,7 @@ try {
                 <form action="../../models/micro.php" method="POST" enctype="multipart/form-data">
                     <div class="row">
 
-                        <div class="col-md-12 text-center">
+                        <div class="col-md-6 text-center">
                             <label for="paciente"><strong>Paciente</strong></label>
                             <select
                                 class="selectpicker w-100"
@@ -95,9 +95,11 @@ try {
                                 name="paciente"
                                 id="paciente"
                                 data-live-search="true"
+                                data-live-search-style="startsWith"
+                                data-live-search-normalize="true"
                                 data-size="9"
                                 required>
-                                <option disabled selected>Selecione o paciente</option>
+                                <option value="Selecione o paciente" disabled selected>Selecione o paciente</option>
                                 <?php
                                 if (!empty($resultado)) {
                                     foreach ($resultado as $row) {
@@ -108,6 +110,11 @@ try {
                                 }
                                 ?>
                             </select>
+                        </div>
+
+                        <div class="col-md-6 text-center">
+                            <label for="cod_exame"><strong>Código do Exame</strong></label>
+                            <input type="text" readonly name="cod_exame" class="form-control" id="cod_exame" >
                         </div>
 
                         <div class="col-md-12 text-center">
@@ -227,6 +234,7 @@ try {
 </section>
 
 <script src="../../../public/js/camposEscondidosMicro.js"></script>
+<script src="../../../public/js/informacoes.js"></script>
 
 <style>
     /* Para animação de fade-in e fade-out */

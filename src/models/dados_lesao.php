@@ -141,14 +141,20 @@ try {
                     // Validação do tipo de arquivo
                     $formatos_img = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
                     if (!in_array($tipo_imagem, $formatos_img)) {
-                        // Apenas ignora este arquivo e continua para o próximo
+                        echo 
+                            "<script>
+                                alert('Tipo de arquivo inválido: " . $imagem['name'] . "');
+                            </script>";
                         continue;
                     }
 
                     // Validação do tamanho do arquivo (50MB)
                     $tamanho_max = 50 * 1024 * 1024;
                     if ($tamanho_imagem > $tamanho_max) {
-                        // Apenas ignora este arquivo e continua para o próximo
+                        echo 
+                            "<script>
+                                alert('Tamanho do arquivo inválido: " . $imagem['name'] . ". O tamanho máximo permitido é 50MB.');
+                            </script>";
                         continue;
                     }
 
@@ -195,14 +201,20 @@ try {
                     // Validação do tipo de arquivo
                     $formatos_img = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
                     if (!in_array($tipo_foto, $formatos_img)) {
-                        // Apenas ignora este arquivo e continua para o próximo
+                        echo 
+                            "<script>
+                                alert('Tipo de arquivo inválido: " . $imagem['name'] . "');
+                            </script>";
                         continue;
                     }
 
-                    // Validação do tamanho do arquivo (50MB)
+                    // Validação do tamanho do arquivo (100MB)
                     $tamanho_max = 50 * 1024 * 1024;
                     if ($tamanho_foto > $tamanho_max) {
-                        // Apenas ignora este arquivo e continua para o próximo
+                        echo 
+                            "<script>
+                                alert('Tamanho do arquivo inválido: " . $imagem['name'] . ". O tamanho máximo permitido é 50MB.');
+                            </script>";
                         continue;
                     }
 

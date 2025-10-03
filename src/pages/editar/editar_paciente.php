@@ -60,7 +60,9 @@ $data_entrada = $exame_liberado['DataEntradaMaterial'];
 function getRedirectUrl($cargo, $paciente_id) {
     $paths = [
         'professor' => 'professor',
+        'professor_dev' => 'professor',
         'funcionário' => 'funcionario',
+        'funcionário_dev' => 'funcionario',
         'dentista' => 'dentista',
         'alunopos' => 'aluno'
     ];

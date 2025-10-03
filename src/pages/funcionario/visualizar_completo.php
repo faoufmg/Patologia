@@ -66,6 +66,25 @@ try {
 
     $microscopia = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Verifica se o paciente tem imagens clínicas
+    $query =
+            "SELECT
+                COUNT(*) AS Total
+            FROM
+                DadosLesao AS DL
+            RIGHT JOIN
+                FotoClinica AS FC
+            ON
+                FC.DadosLesao_id = DL.DadosLesao_id
+            WHERE
+                DL.Paciente_id = :Paciente_id";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':Paciente_id', $paciente_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+    $total = $resultado['Total'];
+    // print_r($resultado);
+
     // Verifica se o exame já foi liberado e o professor responsável
     $query =
         "SELECT
@@ -123,7 +142,6 @@ try {
                         <th>Profissão</th>
                         <th>Procedência</th>
                         <th>Remetente</th>
-                        <th>Visualizar Documentos</th>
                         <th>Editar</th>
                     </tr>
                 </thead>
@@ -153,18 +171,6 @@ try {
                         <td>' . $paciente['Profissao'] . '</td>
                         <td>' . $paciente['ProcedenciaExame'] . '</td>
                         <td>' . $paciente['SolicitantePaciente'] . '</td>
-                        <td>';
-    
-                            if ($paciente['ProcedenciaExame'] == 'Odilon Behrens') {
-                                echo '<form action="../visualizar/visualizar_documento.php" method="post" target="_blank" style="display:inline;">
-                                        <input type="hidden" name="Paciente_id" value="' . $paciente_id . '">
-                                        <button type="submit" class="btn btn-primary">Visualizar</button>
-                                    </form>';
-                            } else {
-                                echo "Não disponível";
-                            }
-    
-                        echo '</td>
                         <td>';
                             
 
@@ -205,7 +211,8 @@ try {
                         <th>Localização</th>
                         <th>Diagnostico Clínico</th>
                         <th>Observação</th>
-                        <th>Visualizar Documentos</th>
+                        <th>Visualizar Imagens</th>
+                        <th>Visualizar Raio-X</th>
                         <th>Editar</th>
                     </tr>
                 </thead>
@@ -229,6 +236,18 @@ try {
                                 <td>' . $lesao['Localizacao'] . '</td>
                                 <td>' . $lesao['DiagnosticoClinico'] . '</td>
                                 <td>' . $lesao['ObservacaoLesao'] . '</td>
+                                <td>';
+    
+                                    if ($total > 0) {
+                                        echo '<form action="../visualizar/visualizar_clinica.php" method="post" target="_blank" style="display:inline;">
+                                                <input type="hidden" name="DadosLesao_id" value="' . $lesao['DadosLesao_id'] . '">
+                                                <button type="submit" class="btn btn-primary">Visualizar</button>
+                                            </form>';
+                                    } else {
+                                        echo "Nenhuma imagem enviada";
+                                    }
+    
+                                echo '</td>
                                 <td>';
     
                                     if ($lesao['EnvolvimentoOsseo'] === 'Lesão intra-óssea') {

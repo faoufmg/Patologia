@@ -15,44 +15,83 @@ $dados_lesao_id = $_POST['DadosLesao_id'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imagens da Lesão</title>
+    <title>Arquivos da Lesão</title>
     <style>
-        /* Estilos simples para organizar as imagens */
+        /* Estilos atualizados para organizar os diferentes tipos de arquivo */
         body { font-family: sans-serif; }
-        .galeria { display: flex; flex-wrap: wrap; gap: 15px; }
-        .galeria img { max-width: 300px; height: auto; border: 2px solid #ddd; border-radius: 5px; }
+        .galeria { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+        .arquivo-container {
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+        }
+        .arquivo-container img {
+            max-width: 300px;
+            height: auto;
+            display: block;
+        }
+        .arquivo-container iframe {
+            width: 350px; /* Largura do visualizador de PDF */
+            height: 500px; /* Altura do visualizador de PDF */
+            border: none;
+        }
+        .arquivo-container a {
+            display: block;
+            padding: 20px;
+            background-color: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- <h1>Imagens Associadas à Lesão ID: <?php echo htmlspecialchars($dados_lesao_id); ?></h1> -->
-
     <div class="galeria">
         <?php
         try {
-            // A query continua a mesma
+            // A query continua a mesma, pois o SELECT * já busca todas as colunas necessárias
             $query = "SELECT * FROM ImagemLesao WHERE DadosLesao_id = :DadosLesao_id";
             $stmt = $pdo->prepare($query);
             $stmt->bindParam(':DadosLesao_id', $dados_lesao_id, PDO::PARAM_INT);
             $stmt->execute();
 
-            // A MUDANÇA PRINCIPAL: Usamos fetchAll para obter todas as linhas
-            $imagens = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $arquivos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            if ($imagens) {
-                // Criamos um loop para cada imagem encontrada
-                foreach ($imagens as $imagem) {
-                    $id_unico_da_imagem = $imagem['ImagemLesao_id']; 
+            if ($arquivos) {
+                foreach ($arquivos as $arquivo) {
+                    $id_unico_arquivo = $arquivo['ImagemLesao_id'];
+                    $tipo_arquivo = $arquivo['TipoImagem']; // Ex: 'image/jpeg' ou 'application/pdf'
+                    $caminho_arquivo = $arquivo['CaminhoImagem'];
 
-                    // Para cada imagem, criamos uma tag <img>
-                    // O 'src' aponta para o nosso novo script 'exibir_imagem.php'
-                    echo '<img src="exibir_imagem.php?id=' . htmlspecialchars($id_unico_da_imagem) . '" alt="Imagem da Lesão">';
+                    // Define o endpoint que servirá o arquivo
+                    $url_arquivo = 'exibir_imagem.php?id=' . htmlspecialchars($id_unico_arquivo);
+
+                    echo '<div class="arquivo-container">';
+
+                    // NOVO: Lógica para decidir qual tag HTML usar
+                    // Verifica se o tipo do arquivo começa com 'image/'
+                    if (strpos($tipo_arquivo, 'image/') === 0) {
+                        echo '<img src="' . $url_arquivo . '" alt="Imagem da Lesão">';
+                    
+                    // Verifica se é um PDF
+                    } elseif ($tipo_arquivo === 'application/pdf') {
+                        echo '<iframe src="' . $url_arquivo . '"></iframe>';
+                        echo '<p><a href="' . $url_arquivo . '" target="_blank">Abrir PDF em nova aba</a></p>';
+
+                    // Fallback para qualquer outro tipo de arquivo
+                    } else {
+                        echo '<a href="' . $url_arquivo . '" download="' . htmlspecialchars(basename($caminho_arquivo)) . '">Baixar: ' . htmlspecialchars(basename($caminho_arquivo)) . '</a>';
+                    }
+
+                    echo '</div>';
                 }
             } else {
-                echo "<p>Nenhuma imagem encontrada para esta lesão.</p>";
+                echo "<p>Nenhum arquivo encontrado para esta lesão.</p>";
             }
         } catch (PDOException $e) {
-            die("Erro ao buscar imagens: " . $e->getMessage());
+            die("Erro ao buscar arquivos: " . $e->getMessage());
         }
         ?>
     </div>

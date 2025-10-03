@@ -98,11 +98,6 @@ document.addEventListener("DOMContentLoaded", function() {
             div.classList.add("col-md-6"); // Garante que volta ao tamanho padrão
         });
 
-        allEtilistaInputs.forEach(input => {
-            input.value = "";
-            input.removeAttribute("required");
-        })
-
     }
 
     function resetFumanteFields() {
@@ -113,11 +108,6 @@ document.addEventListener("DOMContentLoaded", function() {
             div.className = div.className.replace(/\bcol-md-\d+\b/g, "").trim(); // Remove qualquer col-md-* existente
             div.classList.add("col-md-6"); // Garante que volta ao tamanho padrão
         });
-
-        allFumanteInputs.forEach(input => {
-            input.value = "";
-            input .removeAttribute("required");
-        })
 
     }
 

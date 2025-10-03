@@ -89,6 +89,7 @@ try {
                     <th>Visualizar Dados</th>
                     <th>Liberar Laudo</th>
                     <th>Visualizar Laudo</th>
+                    <th>Atualizar Laudo</th>
                     <!-- <th>Status</th> -->
                 </tr>
             </thead>
@@ -126,6 +127,31 @@ try {
                                     <form action="../../models/laudos/visualizar_laudo.php" method="post" target="_blank">
                                         <input type="hidden" name="Paciente_id" value="<?php echo htmlspecialchars($row['Paciente_id']); ?>">
                                         <button class="btn btn-success" style="background-color: green;" type="submit">Baixar</button>
+                                    </form>
+                                <?php else: ?>
+                                    <button class="btn btn-secondary" disabled>Não disponível</button>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php 
+                                    $query =
+                                            "SELECT COUNT(*) AS Total FROM Laudos WHERE Paciente_id = :Paciente_id";
+                                    $stmt = $pdo->prepare($query);
+                                    $stmt->bindParam(":Paciente_id", $row['Paciente_id'], PDO::PARAM_INT);
+                                    $stmt->execute();
+                                    $existe = $stmt->fetch(PDO::FETCH_ASSOC);
+                                ?>
+                                <?php if (ctype_digit($row['ExameNum']) && $existe['Total'] === 1): ?>
+                                    <!-- ExameNum contém apenas números: enviar para laudo_pato_atualizado.php -->
+                                    <form action="../../models/laudos/laudo_pato_atualizado.php" method="post">
+                                        <input type="hidden" name="Paciente_id" value="<?php echo htmlspecialchars($row['Paciente_id']); ?>">
+                                        <button class="btn btn-success" type="submit">Atualizar</button>
+                                    </form>
+                                <?php elseif(!(ctype_digit($row['ExameNum'])) && $existe['Total'] === 1): ?>
+                                    <!-- ExameNum contém letras ou outros caracteres: enviar para laudo_cito_atualizado.php -->
+                                    <form action="../../models/laudos/laudo_cito_atualizado.php" method="post">
+                                        <input type="hidden" name="Paciente_id" value="<?php echo htmlspecialchars($row['Paciente_id']); ?>">
+                                        <button class="btn btn-success" type="submit">Atualizar</button>
                                     </form>
                                 <?php else: ?>
                                     <button class="btn btn-secondary" disabled>Não disponível</button>

@@ -2,27 +2,56 @@
 include_once('../../config/db.php');
 include_once('../partials/header.php');
 
+$cargo = $_SESSION['cargo'];
+
 try {
-    $query =
-        "SELECT
-            P.*, DL.*, Ma.*, Mi.*, L.*
-        FROM
-            Paciente AS P
-        LEFT JOIN
-            DadosLesao AS DL ON P.Paciente_id = DL.Paciente_id
-        LEFT JOIN
-            Macroscopia AS Ma ON P.Paciente_id = Ma.Paciente_id
-        LEFT JOIN
-            Microscopia AS Mi ON P.Paciente_id = Mi.Paciente_id
-        LEFT JOIN
-            Laboratorio AS L ON P.Paciente_id = L.Paciente_id
-        JOIN
-            SolicitacaoExame AS SE ON SE.CodigoSolicitacao = P.CodigoSolicitacao
-        WHERE
-            SE.Ativo = 1";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute();
-    $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if($cargo != 'funcionário_dev' || $cargo != 'professor_dev' || $cargo != 'alunopos_dev') {
+        $query =
+            "SELECT
+                P.*, DL.*, Ma.*, Mi.*, L.*
+            FROM
+                Paciente AS P
+            LEFT JOIN
+                DadosLesao AS DL ON P.Paciente_id = DL.Paciente_id
+            LEFT JOIN
+                Macroscopia AS Ma ON P.Paciente_id = Ma.Paciente_id
+            LEFT JOIN
+                Microscopia AS Mi ON P.Paciente_id = Mi.Paciente_id
+            LEFT JOIN
+                Laboratorio AS L ON P.Paciente_id = L.Paciente_id
+            JOIN
+                SolicitacaoExame AS SE ON SE.CodigoSolicitacao = P.CodigoSolicitacao
+            WHERE
+                (SE.Ativo = 1) AND
+                P.NomePaciente NOT IN (SELECT NomePaciente FROM Paciente WHERE NomePaciente LIKE 'teste%') AND
+                L.ExameNum != '2'";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        $query =
+            "SELECT
+                P.*, DL.*, Ma.*, Mi.*, L.*
+            FROM
+                Paciente AS P
+            LEFT JOIN
+                DadosLesao AS DL ON P.Paciente_id = DL.Paciente_id
+            LEFT JOIN
+                Macroscopia AS Ma ON P.Paciente_id = Ma.Paciente_id
+            LEFT JOIN
+                Microscopia AS Mi ON P.Paciente_id = Mi.Paciente_id
+            LEFT JOIN
+                Laboratorio AS L ON P.Paciente_id = L.Paciente_id
+            JOIN
+                SolicitacaoExame AS SE ON SE.CodigoSolicitacao = P.CodigoSolicitacao
+            WHERE
+                SE.Ativo = 1";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 } catch (Exception $e) {
     echo
     "<script>
