@@ -75,9 +75,6 @@ try {
                         <th>Idade</th>
                         <th>Telefone</th>
                         <th>Endereço</th>
-                        <th>Bairro</th>
-                        <th>CEP</th>
-                        <th>Cidade/Estado</th>
                         <th>Cartão SUS</th>
                         <th>Cor da Pele</th>
                         <th>Fumante</th>
@@ -85,29 +82,22 @@ try {
                         <th>Profissao</th>
                         <th>Procedência</th>
                         <th>Remetente</th>
+
                         <th>Tempo de Lesão</th>
                         <th>Tipo de Lesão</th>
                         <th>Número de Lesões</th>
                         <th>Envolvimento Ósseo</th>
                         <th>Coloração</th>
                         <th>Sintomatologia</th>
-                        <th>Sintomas</th>
                         <th>Tamanho da Lesão</th>
                         <th>Modo de Coleta</th>
                         <th>Manifestação</th>
-                        <th>Data da Coleta</th>
+                        <th>Achados Radiográficos</th>
                         <th>Localização</th>
                         <th>Diagnostico Clínico</th>
-                        <th>Total de Fragmentos</th>
-                        <th>Tipo de Fragmentos</th>
-                        <th>Formato</th>
-                        <th>Superfície</th>
-                        <th>Coloração</th>
-                        <th>Consistência</th>
-                        <th>Fragmentos p/ Inclusão</th>
-                        <th>Fragmentos p/ Descalcificação</th>
-                        <th>Data</th>
-                        <th>Responsáveis</th>
+
+                        <th>Macroscopia</th>
+
                         <th>Microscopia</th>
                         <th>Diagnostico</th>
                         <th>Nota</th>
@@ -124,10 +114,30 @@ try {
                                 <td><?php echo htmlspecialchars($row['Sexo']); ?></td>
                                 <td><?php echo htmlspecialchars($row['Idade']); ?></td>
                                 <td><?php echo htmlspecialchars($row['Telefone']); ?></td>
-                                <td><?php echo htmlspecialchars($row['Endereco']); ?></td>
-                                <td><?php echo htmlspecialchars($row['Bairro']); ?></td>
-                                <td><?php echo htmlspecialchars($row['CEP']); ?></td>
-                                <td><?php echo htmlspecialchars($row['CidadeEstado']); ?></td>
+                                <td>
+                                    <?php
+                                        $endereco = '';
+                                        $row['Endereco'] === '' && $row['Bairro'] === '' && $row['CEP'] === '' && $row['CidadeEstado'] === '' ? $endereco = 'Endereço não informado' : '';
+                                        $row['Endereco'] === '' && $row['Bairro'] === '' && $row['CEP'] === '' && $row['CidadeEstado'] !== '' ? $endereco = $row['CidadeEstado'] : '';
+                                        $row['Endereco'] === '' && $row['Bairro'] === '' && $row['CEP'] !== '' && $row['CidadeEstado'] === '' ? $endereco = $row['CEP'] : '';
+                                        $row['Endereco'] === '' && $row['Bairro'] !== '' && $row['CEP'] === '' && $row['CidadeEstado'] === '' ? $endereco = $row['Bairro'] : '';
+                                        $row['Endereco'] === '' && $row['Bairro'] === '' && $row['CEP'] !== '' && $row['CidadeEstado'] !== '' ? $endereco = $row['CEP'] . ', ' . $row['CidadeEstado'] : '';
+                                        $row['Endereco'] === '' && $row['Bairro'] !== '' && $row['CEP'] === '' && $row['CidadeEstado'] !== '' ? $endereco = $row['Bairro'] . ', ' . $row['CidadeEstado'] : '';
+                                        $row['Endereco'] === '' && $row['Bairro'] !== '' && $row['CEP'] !== '' && $row['CidadeEstado'] === '' ? $endereco = $row['Bairro'] . ', ' . $row['CEP'] : '';
+                                        $row['Endereco'] === '' && $row['Bairro'] !== '' && $row['CEP'] !== '' && $row['CidadeEstado'] !== '' ? $endereco = $row['Bairro'] . ', ' . $row['CEP'] . ', ' . $row['CidadeEstado'] : '';
+                                        
+                                        $row['Endereco'] !== '' && $row['Bairro'] !== '' && $row['CEP'] !== '' && $row['CidadeEstado'] !== '' ? $endereco = $row['Endereco'] . ', ' . $row['Bairro'] . ', ' . $row['CEP'] . ', ' . $row['CidadeEstado'] : '';
+                                        $row['Endereco'] !== '' && $row['Bairro'] === '' && $row['CEP'] === '' && $row['CidadeEstado'] !== '' ? $endereco = $row['Endereco'] . ', ' . $row['CidadeEstado'] : '';
+                                        $row['Endereco'] !== '' && $row['Bairro'] === '' && $row['CEP'] !== '' && $row['CidadeEstado'] === '' ? $endereco = $row['Endereco'] . ', ' . $row['CEP'] : '';
+                                        $row['Endereco'] !== '' && $row['Bairro'] !== '' && $row['CEP'] === '' && $row['CidadeEstado'] === '' ? $endereco = $row['Endereco'] . ', ' . $row['Bairro'] : '';
+                                        $row['Endereco'] !== '' && $row['Bairro'] === '' && $row['CEP'] !== '' && $row['CidadeEstado'] !== '' ? $endereco = $row['Endereco'] . ', ' . $row['CEP'] . ', ' . $row['CidadeEstado'] : '';
+                                        $row['Endereco'] !== '' && $row['Bairro'] !== '' && $row['CEP'] === '' && $row['CidadeEstado'] !== '' ? $endereco = $row['Endereco'] . ', ' . $row['Bairro'] . ', ' . $row['CidadeEstado'] : '';
+                                        $row['Endereco'] !== '' && $row['Bairro'] !== '' && $row['CEP'] !== '' && $row['CidadeEstado'] === '' ? $endereco = $row['Endereco'] . ', ' . $row['Bairro'] . ', ' . $row['CEP'] : '';
+                                        $row['Endereco'] !== '' && $row['Bairro'] === '' && $row['CEP'] === '' && $row['CidadeEstado'] === '' ? $endereco = $row['Endereco'] : '';
+                                        
+                                        echo htmlspecialchars($endereco);
+                                    ?>
+                                </td>
                                 <td><?php echo htmlspecialchars($row['CartaoSUS']); ?></td>
                                 <td><?php echo htmlspecialchars($row['CorPele']); ?></td>
                                 <td><?php echo htmlspecialchars($row['Fumante']); ?></td>
@@ -142,24 +152,19 @@ try {
                                 <td><?php echo htmlspecialchars($row['EnvolvimentoOsseo']); ?></td>
                                 <td><?php echo htmlspecialchars($row['Coloracao']); ?></td>
                                 <td><?php echo htmlspecialchars($row['Sintomatologia']); ?></td>
-                                <td><?php echo htmlspecialchars($row['Sintoma']); ?></td>
                                 <td><?php echo htmlspecialchars($row['Tamanho']); ?></td>
                                 <td><?php echo htmlspecialchars($row['ModoColeta']); ?></td>
                                 <td><?php echo htmlspecialchars($row['Manifestacao']); ?></td>
-                                <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($row['DataColeta']))); ?></td>
+                                <td><?php echo htmlspecialchars($row['ExameImagem']); ?></td>
                                 <td><?php echo htmlspecialchars($row['Localizacao']); ?></td>
                                 <td><?php echo htmlspecialchars($row['DiagnosticoClinico']); ?></td>
 
-                                <td><?php echo htmlspecialchars($row['Fragmentos']); ?></td>
-                                <td><?php echo htmlspecialchars($row['TipoFragmento']); ?></td>
-                                <td><?php echo htmlspecialchars($row['Formato']); ?></td>
-                                <td><?php echo htmlspecialchars($row['Superficie']); ?></td>
-                                <td><?php echo htmlspecialchars($row['ColoracaoMacro']); ?></td>
-                                <td><?php echo htmlspecialchars($row['Consistencia']); ?></td>
-                                <td><?php echo htmlspecialchars($row['FragInclusao']); ?></td>
-                                <td><?php echo htmlspecialchars($row['FragDescalcificacao']); ?></td>
-                                <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($row['Data']))); ?></td>
-                                <td><?php echo htmlspecialchars($row['Responsaveis']); ?></td>
+                                <td>
+                                    <?php
+                                        $macroscopia = 'Qtd fragmentos: '. strtolower($row['Fragmentos']) .', tipo: '. strtolower($row['TipoFragmento']) .', formato: '. strtolower($row['Formato']) .', superfície: '. strtolower($row['Superficie']) .', coloração: '. strtolower($row['ColoracaoMacro']) .', consistência: '. strtolower($row['Consistencia']) .', fragmentos p/ inclusão: '. strtolower($row['FragInclusao']) .', fragmentos p/ descalcificação: '. strtolower($row['FragDescalcificacao']) .', responsáveis: '. $row['Responsavies'];
+                                        echo htmlspecialchars($macroscopia);
+                                    ?>
+                                </td>
 
                                 <td><?php echo htmlspecialchars($row['Microscopia']); ?></td>
                                 <td><?php echo htmlspecialchars($row['Diagnostico']); ?></td>

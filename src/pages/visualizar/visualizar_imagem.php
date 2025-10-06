@@ -65,6 +65,8 @@ $dados_lesao_id = $_POST['DadosLesao_id'];
                     $tipo_arquivo = $arquivo['TipoImagem']; // Ex: 'image/jpeg' ou 'application/pdf'
                     $caminho_arquivo = $arquivo['CaminhoImagem'];
 
+                    // echo $caminho_arquivo;
+
                     // Define o endpoint que servirá o arquivo
                     $url_arquivo = 'exibir_imagem.php?id=' . htmlspecialchars($id_unico_arquivo);
 

@@ -96,7 +96,7 @@ try {
                                 data-live-search="true"
                                 data-size="10"
                                 required>
-                                <option selected disabled>Selecione o professor</option>
+                                <option selected disabled>Selecione o professor que irá laudar</option>
                                 <?php
                                 if (!empty($resultado)) {
                                     foreach ($resultado as $row) {
@@ -232,7 +232,7 @@ try {
 
                         <div class="col-md-6 text-center" id="especificacao_fumante_div" style="display: none;">
                             <label for="especificacao_fumante"><strong>Especificação</strong></label>
-                            <input type="text" name="especificacao_fumante" placeholder="Especifique o tipo de fumante" class="form-control" id="especificacao_fumante">
+                            <input type="text" name="especificacao_fumante" placeholder="Especifique o tipo de cigarro" class="form-control" id="especificacao_fumante">
                         </div>
 
                         <div class="col-md-6 text-center" id="quantidade_fumante_div" style="display: none;">
@@ -268,7 +268,7 @@ try {
 
                         <div class="col-md-6 text-center" id="especificacao_etilista_div" style="display: none;">
                             <label for="especificacao_etilista"><strong>Especificação</strong></label>
-                            <input type="text" name="especificacao_etilista" placeholder="Especifique o tipo de etilista" class="form-control" id="especificacao_etilista">
+                            <input type="text" name="especificacao_etilista" placeholder="Especifique o tipo de bebida" class="form-control" id="especificacao_etilista">
                         </div>
 
                         <div class="col-md-6 text-center" id="quantidade_etilista_div" style="display: none;">

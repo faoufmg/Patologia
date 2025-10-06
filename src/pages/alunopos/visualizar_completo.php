@@ -18,9 +18,33 @@ try {
     $stmt->bindParam(':Paciente_id', $paciente_id, PDO::PARAM_INT);
     $stmt->execute();
 
-    $dados_paciente = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $dados_paciente = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // print_r($dados_paciente);
+
+    $etilista = '';
+    $etilista_tempo_parou = '';
+    if (strpos($dados_paciente['Etilista'], 'Tempo que parou: ') !== false) {
+        $start = strpos($dados_paciente['Etilista'], 'Tempo que parou: ') + strlen('Tempo que parou: ');
+        $end = strpos($dados_paciente['Etilista'], ',', $start);
+        $etilista_tempo_parou = $end !== false ? substr($dados_paciente['Etilista'], $start, $end - $start) : substr($dados_paciente['Etilista'], $start);
+    }
+
+    $etilista_tempo_parou === '' && $dados_paciente['Etilista'] !== 'Não' ? $etilista = 'Sim, ' . strtolower($dados_paciente['Etilista']) : '';
+    $etilista_tempo_parou !== '' && $dados_paciente['Etilista'] !== 'Não' ? $etilista = 'Ex-etilista, ' . strtolower($dados_paciente['Etilista']) : '';
+    $dados_paciente['Etilista'] === 'Não' ? $etilista = 'Não' : '';
+    
+    $fumante = '';
+    $fumante_tempo_parou = '';
+    if (strpos($dados_paciente['Fumante'], 'Tempo que parou: ') !== false) {
+        $start = strpos($dados_paciente['Fumante'], 'Tempo que parou: ') + strlen('Tempo que parou: ');
+        $end = strpos($dados_paciente['Fumante'], ',', $start);
+        $fumante_tempo_parou = $end !== false ? substr($dados_paciente['Fumante'], $start, $end - $start) : substr($dados_paciente['Fumante'], $start);
+    }
+
+    $fumante_tempo_parou === '' && $dados_paciente['Fumante'] !== 'Não' ? $fumante = 'Sim, ' . strtolower($dados_paciente['Fumante']) : '';
+    $fumante_tempo_parou !== '' && $dados_paciente['Fumante'] !== 'Não' ? $fumante = 'Ex-fumante, ' . strtolower($dados_paciente['Fumante']) : '';
+    $dados_paciente['Fumante'] === 'Não' ? $fumante = 'Não' : '';
 
     // Dados da lesão
     $query =
@@ -145,8 +169,8 @@ try {
                         <td>' . $paciente['CidadeEstado'] . '</td>
                         <td>' . $paciente['CartaoSUS'] . '</td>
                         <td>' . $paciente['CorPele'] . '</td>
-                        <td>' . $paciente['Fumante'] . '</td>
-                        <td>' . $paciente['Etilista'] . '</td>
+                        <td>' . $fumante . '</td>
+                        <td>' . $etilista . '</td>
                         <td>' . $paciente['Profissao'] . '</td>
                         <td>' . $paciente['ProcedenciaExame'] . '</td>
                         <td>' . $paciente['SolicitantePaciente'] . '</td>

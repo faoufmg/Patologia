@@ -18,9 +18,33 @@ try {
     $stmt->bindParam(':Paciente_id', $paciente_id, PDO::PARAM_INT);
     $stmt->execute();
 
-    $dados_paciente = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $dados_paciente = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // print_r($dados_paciente);
+
+    $etilista = '';
+    $etilista_tempo_parou = '';
+    if (strpos($dados_paciente['Etilista'], 'Tempo que parou: ') !== false) {
+        $start = strpos($dados_paciente['Etilista'], 'Tempo que parou: ') + strlen('Tempo que parou: ');
+        $end = strpos($dados_paciente['Etilista'], ',', $start);
+        $etilista_tempo_parou = $end !== false ? substr($dados_paciente['Etilista'], $start, $end - $start) : substr($dados_paciente['Etilista'], $start);
+    }
+
+    $etilista_tempo_parou === '' && $dados_paciente['Etilista'] !== 'Não' ? $etilista = 'Sim, ' . strtolower($dados_paciente['Etilista']) : '';
+    $etilista_tempo_parou !== '' && $dados_paciente['Etilista'] !== 'Não' ? $etilista = 'Ex-etilista, ' . strtolower($dados_paciente['Etilista']) : '';
+    $dados_paciente['Etilista'] === 'Não' ? $etilista = 'Não' : '';
+    
+    $fumante = '';
+    $fumante_tempo_parou = '';
+    if (strpos($dados_paciente['Fumante'], 'Tempo que parou: ') !== false) {
+        $start = strpos($dados_paciente['Fumante'], 'Tempo que parou: ') + strlen('Tempo que parou: ');
+        $end = strpos($dados_paciente['Fumante'], ',', $start);
+        $fumante_tempo_parou = $end !== false ? substr($dados_paciente['Fumante'], $start, $end - $start) : substr($dados_paciente['Fumante'], $start);
+    }
+
+    $fumante_tempo_parou === '' && $dados_paciente['Fumante'] !== 'Não' ? $fumante = 'Sim, ' . strtolower($dados_paciente['Fumante']) : '';
+    $fumante_tempo_parou !== '' && $dados_paciente['Fumante'] !== 'Não' ? $fumante = 'Ex-fumante, ' . strtolower($dados_paciente['Fumante']) : '';
+    $dados_paciente['Fumante'] === 'Não' ? $fumante = 'Não' : '';
 
     // Dados da lesão
     $query =
@@ -147,42 +171,42 @@ try {
                 </thead>
                 <tbody id="paciente-dados">
                     <?php
-                    foreach ($dados_paciente as $paciente) {
+
                         echo '<tr>
                         <td>' . $exame_num . '</td>
                         <td>' . $nome_professor . '</td>
-                        <td>' . $paciente['NomePaciente'] . '</td>
+                        <td>' . $dados_paciente['NomePaciente'] . '</td>
                         <td>' . (
-                            $paciente['DataNascimento'] === '0001-01-01'
+                            $dados_paciente['DataNascimento'] === '0001-01-01'
                                 ? 'Data de nascimento não informada'
-                                : date('d/m/Y', strtotime($paciente['DataNascimento']))
+                                : date('d/m/Y', strtotime($dados_paciente['DataNascimento']))
                         ) . '</td>
-                        <td>' . $paciente['Sexo'] . '</td>
-                        <td>' . $paciente['Idade'] . '</td>
-                        <td>' . $paciente['Telefone'] . '</td>
-                        <td>' . $paciente['Endereco'] . '</td>
-                        <td>' . $paciente['Bairro'] . '</td>
-                        <td>' . $paciente['CEP'] . '</td>
-                        <td>' . $paciente['CidadeEstado'] . '</td>
-                        <td>' . $paciente['CartaoSUS'] . '</td>
-                        <td>' . $paciente['CorPele'] . '</td>
-                        <td>' . $paciente['Fumante'] . '</td>
-                        <td>' . $paciente['Etilista'] . '</td>
-                        <td>' . $paciente['Profissao'] . '</td>
-                        <td>' . $paciente['ProcedenciaExame'] . '</td>
-                        <td>' . $paciente['SolicitantePaciente'] . '</td>
+                        <td>' . $dados_paciente['Sexo'] . '</td>
+                        <td>' . $dados_paciente['Idade'] . '</td>
+                        <td>' . $dados_paciente['Telefone'] . '</td>
+                        <td>' . $dados_paciente['Endereco'] . '</td>
+                        <td>' . $dados_paciente['Bairro'] . '</td>
+                        <td>' . $dados_paciente['CEP'] . '</td>
+                        <td>' . $dados_paciente['CidadeEstado'] . '</td>
+                        <td>' . $dados_paciente['CartaoSUS'] . '</td>
+                        <td>' . $dados_paciente['CorPele'] . '</td>
+                        <td>' . $fumante . '</td>
+                        <td>' . $etilista . '</td>
+                        <td>' . $dados_paciente['Profissao'] . '</td>
+                        <td>' . $dados_paciente['ProcedenciaExame'] . '</td>
+                        <td>' . $dados_paciente['SolicitantePaciente'] . '</td>
                         <td>';
                             
 
                                 echo '<form action="../editar/editar_paciente.php" method="post" style="display:inline;">
-                                        <input type="hidden" name="Paciente_id" value="' . $paciente['Paciente_id'] . '">
+                                        <input type="hidden" name="Paciente_id" value="' . $dados_paciente['Paciente_id'] . '">
                                         <button type="submit" class="btn btn-primary">Editar</button>
                                     </form>';
                             
                             
                         echo '</td>
                     </tr>';
-                    }
+                    
                     ?>
                 </tbody>
             </table>

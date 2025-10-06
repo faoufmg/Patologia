@@ -259,7 +259,7 @@ try {
                         </div>
 
                         <div class="col-md-6 text-center" id="exame_imagem_div">
-                            <label for="exame_imagem"><strong>Exames de Imagem</strong></label>
+                            <label for="exame_imagem"><strong>Achados Radiográficos</strong></label>
                             <select title="Selecione" name="exame_imagem" class="form-select" id="exame_imagem" >
                                 <option value="" disabled selected>Selecione</option>
                                 <option value="Sim">Sim</option>
@@ -268,7 +268,7 @@ try {
                         </div>
 
                         <div class="col-md-6 text-center" id="achados_exame_imagem_div" style="display: none;">
-                            <label for="achados_exame_imagem"><strong>Achados</strong></label>
+                            <label for="achados_exame_imagem"><strong>Principais Achados</strong></label>
                             <input type="text" name="achados_exame_imagem" placeholder="Digite o que foi achado nos exames de imagem" class="form-control" id="achados_exame_imagem" >
                         </div>
 
