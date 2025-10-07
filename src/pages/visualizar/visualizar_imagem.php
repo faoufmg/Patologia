@@ -51,7 +51,6 @@ $dados_lesao_id = $_POST['DadosLesao_id'];
     <div class="galeria">
         <?php
         try {
-            // A query continua a mesma, pois o SELECT * já busca todas as colunas necessárias
             $query = "SELECT * FROM ImagemLesao WHERE DadosLesao_id = :DadosLesao_id";
             $stmt = $pdo->prepare($query);
             $stmt->bindParam(':DadosLesao_id', $dados_lesao_id, PDO::PARAM_INT);

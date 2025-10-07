@@ -93,16 +93,16 @@ try {
     }
 
     $macroscopia_complemento = '';
-    if (!empty($resultado['FragInclusao']) && $resultado['FragInclusao'] === '1') {
+    if (!empty($resultado['FragInclusao']) && ($resultado['FragInclusao'] === '1' || $resultado['FragInclusao'] === '01')) {
         $macroscopia_complemento = 'Foi enviado ' . htmlspecialchars($resultado['FragInclusao']) . ' fragmento para inclusão.';
     }
-    elseif(!empty($resultado['FragInclusao']) && $resultado['FragInclusao'] !== '1') {
+    elseif(!empty($resultado['FragInclusao']) && $resultado['FragInclusao'] !== '1' && $resultado['FragInclusao'] !== '01') {
         $macroscopia_complemento = 'Foram enviados ' . htmlspecialchars(strtolower($resultado['FragInclusao'])) . ' fragmentos para inclusão.';
     }
-    elseif (!empty($resultado['FragDescalcificacao']) && $resultado['FragDescalcificacao'] === '1') {
+    elseif (!empty($resultado['FragDescalcificacao']) && ($resultado['FragDescalcificacao'] === '1' || $resultado['FragDescalcificacao'] === '01')) {
         $macroscopia_complemento = 'Foi enviado ' . htmlspecialchars($resultado['FragDescalcificacao']) . ' fragmento para descalcificação.';
     }
-    elseif(!empty($resultado['FragDescalcificacao']) && $resultado['FragDescalcificacao'] !== '1') {
+    elseif(!empty($resultado['FragDescalcificacao']) && $resultado['FragDescalcificacao'] !== '1' && $resultado['FragDescalcificacao'] !== '01') {
         $macroscopia_complemento = 'Foram enviados ' . htmlspecialchars(strtolower($resultado['FragDescalcificacao'])) . ' fragmentos para descalcificação.';
     }
 
@@ -114,7 +114,12 @@ try {
     // Sanitização das variáveis para usar no HTML
     $exameNum = htmlspecialchars($resultado['ExameNum']);
     $nomePaciente = htmlspecialchars($resultado['NomePaciente']);
+
     $dataNascimento = date('d/m/Y', strtotime($resultado['DataNascimento']));
+    if($dataNascimento === '01/01/0001') {
+        $dataNascimento = 'Não informado';
+    }
+
     $solicitantePaciente = htmlspecialchars($resultado['SolicitantePaciente']);
     $procedenciaExame = htmlspecialchars($resultado['ProcedenciaExame']);
     $especificacaoProcedencia = htmlspecialchars($resultado['EspecificacaoExame']);

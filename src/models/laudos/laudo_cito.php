@@ -69,7 +69,12 @@ try {
     // Sanitização das variáveis para usar no HTML
     $exameNum = htmlspecialchars($resultado['ExameNum']);
     $nomePaciente = htmlspecialchars($resultado['NomePaciente']);
+
     $dataNascimento = date('d/m/Y', strtotime($resultado['DataNascimento']));
+    if($dataNascimento === '01/01/0001') {
+        $dataNascimento = 'Não informado';
+    }
+
     $solicitantePaciente = htmlspecialchars($resultado['SolicitantePaciente']);
     $procedenciaExame = htmlspecialchars($resultado['ProcedenciaExame']);
     $especificacaoProcedencia = htmlspecialchars($resultado['EspecificacaoExame']);

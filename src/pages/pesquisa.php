@@ -110,7 +110,16 @@ try {
                             <tr>
                                 <td><?php echo htmlspecialchars($row['ExameNum']); ?></td>
                                 <td><?php echo htmlspecialchars($row['NomePaciente']); ?></td>
-                                <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($row['DataNascimento']))); ?></td>
+                                <td>
+                                    <?php
+
+                                        if($row['DataNascimento'] === '0001-01-01') {
+                                            echo 'Não informado';
+                                        } else {
+                                            echo htmlspecialchars(date('d/m/Y', strtotime($row['DataNascimento']))); 
+                                        }
+                                    ?>
+                                </td>
                                 <td><?php echo htmlspecialchars($row['Sexo']); ?></td>
                                 <td><?php echo htmlspecialchars($row['Idade']); ?></td>
                                 <td><?php echo htmlspecialchars($row['Telefone']); ?></td>
@@ -140,8 +149,42 @@ try {
                                 </td>
                                 <td><?php echo htmlspecialchars($row['CartaoSUS']); ?></td>
                                 <td><?php echo htmlspecialchars($row['CorPele']); ?></td>
-                                <td><?php echo htmlspecialchars($row['Fumante']); ?></td>
-                                <td><?php echo htmlspecialchars($row['Etilista']); ?></td>
+                                <td>
+                                    <?php
+
+                                        $fumante = '';
+                                        $fumante_tempo_parou = '';
+                                        if (strpos($row['Fumante'], 'Tempo que parou: ') !== false) {
+                                            $start = strpos($row['Fumante'], 'Tempo que parou: ') + strlen('Tempo que parou: ');
+                                            $end = strpos($row['Fumante'], ',', $start);
+                                            $fumante_tempo_parou = $end !== false ? substr($row['Fumante'], $start, $end - $start) : substr($row['Fumante'], $start);
+                                        }
+
+                                        $fumante_tempo_parou === '' && $row['Fumante'] !== 'Não' ? $fumante = 'Sim, ' . strtolower($row['Fumante']) : '';
+                                        $fumante_tempo_parou !== '' && $row['Fumante'] !== 'Não' ? $fumante = 'Ex-fumante, ' . strtolower($row['Fumante']) : '';
+                                        $row['Fumante'] === 'Não' ? $fumante = 'Não' : '';
+                                
+                                        echo htmlspecialchars($fumante); 
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+
+                                        $etilista = '';
+                                        $etilista_tempo_parou = '';
+                                        if (strpos($row['Etilista'], 'Tempo que parou: ') !== false) {
+                                            $start = strpos($row['Etilista'], 'Tempo que parou: ') + strlen('Tempo que parou: ');
+                                            $end = strpos($row['Etilista'], ',', $start);
+                                            $etilista_tempo_parou = $end !== false ? substr($row['Etilista'], $start, $end - $start) : substr($row['Etilista'], $start);
+                                        }
+
+                                        $etilista_tempo_parou === '' && $row['Etilista'] !== 'Não' ? $etilista = 'Sim, ' . strtolower($row['Etilista']) : '';
+                                        $etilista_tempo_parou !== '' && $row['Etilista'] !== 'Não' ? $etilista = 'Ex-etilista, ' . strtolower($row['Etilista']) : '';
+                                        $row['Etilista'] === 'Não' ? $etilista = 'Não' : '';
+
+                                        echo htmlspecialchars($etilista);
+                                    ?>
+                                </td>
                                 <td><?php echo htmlspecialchars($row['Profissao']); ?></td>
                                 <td><?php echo htmlspecialchars($row['ProcedenciaExame']); ?></td>
                                 <td><?php echo htmlspecialchars($row['SolicitantePaciente']); ?></td>

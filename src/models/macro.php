@@ -1,4 +1,5 @@
 <?php
+
 include_once('../../config/db.php');
 session_start();
 
@@ -18,9 +19,8 @@ $rev_lamina = isset($_POST['rev_lamina']) ? sanitizeInput($_POST['rev_lamina']) 
 $paciente_id = isset($_POST['paciente']) ? sanitizeInt($_POST['paciente']) : NULL;
 $fragmentos = isset($_POST['fragmentos']) ? sanitizeInput($_POST['fragmentos']) : NULL;
 $tecido = isset($_POST['tecido']) ? sanitizeInput($_POST['tecido']) : NULL;
-$frag_inclusao = isset($_POST['frag_inclusao']) ? sanitizeInput($_POST['frag_inclusao']) : NULL;
-$frag_descalcificacao = isset($_POST['frag_descalcificacao']) ? sanitizeInput($_POST['frag_descalcificacao']) : NULL;
-$tam_macro = isset($_POST['tam_macro']) ? sanitizeInput($_POST['tam_macro']) : NULL;
+$frag_inclusao = !empty($_POST['frag_inclusao']) ? sanitizeInput($_POST['frag_inclusao']) : '0';
+$frag_descalcificacao = !empty($_POST['frag_descalcificacao']) ? sanitizeInput($_POST['frag_descalcificacao']) : '0';
 $data = isset($_POST['data']) ? sanitizeInput($_POST['data']) : NULL;
 $responsavel = isset($_POST['responsavel']) ? sanitizeInput($_POST['responsavel']) : NULL;
 $observacoes = isset($_POST['observacoes']) ? sanitizeInput($_POST['observacoes']) : NULL;
@@ -75,6 +75,11 @@ if (isset($_POST['consistencia'])) {
     } else {
         $consistencia = NULL;
     }
+}
+
+$tam_macro = isset($_POST['tam_macro']) ? sanitizeInput($_POST['tam_macro']) : NULL;
+if(!str_contains($tam_macro, 'mm')) {
+    $tam_macro = $tam_macro . 'mm';
 }
 
 try {

@@ -68,9 +68,13 @@ if (isset($_POST['consistencia'])) {
     }
 }
 
+$tam_macro = isset($_POST['tam_macro']) ? sanitizeInput($_POST['tam_macro']) : NULL;
+if(!str_contains($tam_macro, 'mm')) {
+    $tam_macro = $tam_macro . 'mm';
+}
+
 $frag_inclusao = isset($_POST['frag_inclusao']) ? sanitizeInput($_POST['frag_inclusao']) : NULL;
 $frag_descalcificacao = isset($_POST['frag_descalcificacao']) ? sanitizeInput($_POST['frag_descalcificacao']) : NULL;
-$tam_macro = isset($_POST['tam_macro']) ? sanitizeInput($_POST['tam_macro']) : NULL;
 $data = isset($_POST['data']) ? sanitizeInput($_POST['data']) : NULL;
 $responsavel = isset($_POST['responsavel']) ? sanitizeInput($_POST['responsavel']) : NULL;
 $observacao = isset($_POST['observacao']) ? sanitizeInput($_POST['observacao']) : NULL;

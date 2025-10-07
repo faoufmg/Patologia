@@ -270,9 +270,9 @@ try {
                     <div class="col text-center mt-3">
                         <button class="btn btn-primary me-2" style="background-color: #831D1C">Cadastrar</button>
                         <!-- <a class='btn btn-primary'>Manutenção</a> -->
-                        <?php if ($cargo === 'alunopos_dev' || $cargo === 'professor_dev' || $cargo === 'funcionário_dev'): ?>
+                        <!-- <?php if ($cargo === 'alunopos_dev' || $cargo === 'professor_dev' || $cargo === 'funcionário_dev'): ?>
                             <button type="submit" class="btn btn-primary me-2" style="background-color: #831D1C">Cadastrar</button>
-                        <?php endif ?>
+                        <?php endif ?> -->
                         <?php if ($cargo === 'funcionário' || $cargo === 'funcionário_dev'): ?>
                             <a href='../index/index_funcionario.php' class='btn btn-primary'>Voltar</a>
                         <?php endif; ?>
